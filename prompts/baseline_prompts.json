@@ -1,0 +1,41 @@
+{
+  "constants": {
+    "REFUSE_STRING": "Not enough information.",
+    "CONFLICT_STRING": "Documents contain conflicting information."
+  },
+  "baselines": {
+    "ATTR": {
+      "source_variable": "TRIAGE_INSTR",
+      "instruction": "You must use ONLY the provided documents. Do NOT use outside knowledge.\nIf the documents lack sufficient information, respond exactly: Not enough information.\nIf the documents contain conflicting information, respond exactly: Documents contain conflicting information.\nOtherwise, answer directly using only the documents.\nIf documents conflict, do NOT choose a side and do NOT guess."
+    },
+    "OPIN_INSTR": {
+      "source_variable": "OPIN_INSTR_LINE",
+      "instruction": "Instruction: Read the given information and answer the corresponding question based only on that information."
+    },
+    "KRE": {
+      "source_variable": "KRE_INSTR",
+      "instruction": "You are given documents and a question. The documents may be incomplete, misleading, or may conflict with one another, so judge carefully."
+    },
+    "FaithRAG_CoT": {
+      "source_variable": "FAITH_COT_TEMPLATE",
+      "template": "Task Description:\nGiven a question and a context, triage the relationship between the evidence and the question.\nRespond ONLY in the JSON format shown below.\n\nYou MUST reason through these steps before answering:\n1. [Self-Evidence Extraction]: List specific facts from the context that address the question.\n2. [Fact Analysis]: Check if extracted facts are consistent or explicitly contradict each other.\n3. [Context Check]: Judge if the documents provide one answer, multiple answers, or no answer.\n4. [Final Verification]: Choose the label — ANSWER, REFUSE, or CONFLICT.\n\nTriage Labels:\n- ANSWER: Context is consistent and provides one grounded answer — write the actual answer text.\n- REFUSE: Context lacks sufficient information — write exactly: \"Not enough information.\"\n- CONFLICT: Context contains contradictions — write exactly: \"Documents contain conflicting information.\"\n\nResponse Format:\n{ \"Reason\": \"1. [Self-Evidence Extraction]: ... 2. [Fact Analysis]: ... 3. [Context Check]: ... 4. [Final Verification]: ...\", \"Answer\": \"answer text OR exact refuse/conflict string\" }\n\n---\nExample 1 (ANSWER):\nQuestion: What colour is the sky?\nContext: The sky appears blue due to Rayleigh scattering.\n{ \"Reason\": \"1. [Self-Evidence Extraction]: Sky is blue (Rayleigh scattering). 2. [Fact Analysis]: One consistent fact. 3. [Context Check]: Exactly one answer. 4. [Final Verification]: Mode is ANSWER.\", \"Answer\": \"Blue\" }\n\nExample 2 (REFUSE):\nQuestion: What is the mass of Zelonite?\nContext: Zelonite is found in volcanic regions.\n{ \"Reason\": \"1. [Self-Evidence Extraction]: No mass mentioned. 2. [Fact Analysis]: No relevant facts. 3. [Context Check]: Context does not answer the question. 4. [Final Verification]: Mode is REFUSE.\", \"Answer\": \"Not enough information.\" }\n\nExample 3 (CONFLICT):\nQuestion: Boiling point of Zelonite?\nContext: Lab A says 340C. Lab B says 415C.\n{ \"Reason\": \"1. [Self-Evidence Extraction]: Lab A (340C), Lab B (415C). 2. [Fact Analysis]: Different values, contradiction. 3. [Context Check]: Two contradictory answers. 4. [Final Verification]: Mode is CONFLICT.\", \"Answer\": \"Documents contain conflicting information.\" }\n\n---\nYour Task:\nQuestion: {question}\nContext: {context}\nCoT-Answer: "
+    }
+  },
+  "parser": {
+    "priority": [
+      "CONFLICT",
+      "REFUSE",
+      "ANSWER"
+    ],
+    "conflict_indicators": [
+      "conflicting information",
+      "documents conflict",
+      "documents disagree"
+    ],
+    "refuse_indicators": [
+      "not enough information",
+      "cannot answer"
+    ],
+    "default_label": "ANSWER"
+  }
+}

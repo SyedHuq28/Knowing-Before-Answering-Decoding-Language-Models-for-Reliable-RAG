@@ -1,0 +1,38 @@
+{
+  "P0": {
+    "system": "You are a helpful assistant. Use only the provided documents to answer.",
+    "doc_prefix": "[Document {i}]:\n{doc}\n\n",
+    "pre_docs": "",
+    "suffix": "Question: {question}\nAnswer:"
+  },
+  "P1": {
+    "system": "Answer using only the provided documents. Do not use outside knowledge.",
+    "doc_prefix": "[Document {i}]:\n{doc}\n\n",
+    "pre_docs": "",
+    "suffix": "Question: {question}\nAnswer:"
+  },
+  "P2": {
+    "system": "You are a helpful assistant. Use only the provided documents to answer.",
+    "doc_prefix": "Passage {i}:\n{doc}\n\n",
+    "pre_docs": "",
+    "suffix": "Question: {question}\nAnswer:"
+  },
+  "P3": {
+    "system": "",
+    "doc_prefix": "[Document {i}]:\n{doc}\n\n",
+    "pre_docs": "",
+    "suffix": "Question: {question}\nAnswer:"
+  },
+  "P4": {
+    "system": "You are a helpful assistant. Use only the provided documents to answer.",
+    "doc_prefix": "[Document {i}]:\n{doc}\n\n",
+    "pre_docs": "Question: {question}",
+    "suffix": "Answer:"
+  },
+  "P5": {
+    "system": "You are a helpful assistant. Use only the provided documents to answer.",
+    "doc_prefix": "<doc id=\"{i}\">{doc}</doc>\n",
+    "pre_docs": "",
+    "suffix": "<question>{question}</question>\n<answer>"
+  }
+}
